@@ -290,8 +290,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final authService = AuthService.instance;
-    final userName = authService.userDisplayName ?? 'Operator';
-    final userEmail = authService.userEmail ?? '';
+    final isGuest = authService.isGuest;
+    final userName = isGuest ? 'Convidado' : (authService.userDisplayName ?? 'Operator');
+    final userEmail = isGuest ? '' : (authService.userEmail ?? '');
     final userPhotoUrl = authService.userPhotoUrl;
 
     return Scaffold(
@@ -322,7 +323,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     
                     // User Avatar
-                    if (userPhotoUrl != null)
+                    if (userPhotoUrl != null && !isGuest)
                       CircleAvatar(
                         radius: 20,
                         backgroundImage: NetworkImage(userPhotoUrl),
@@ -332,13 +333,19 @@ class _HomeViewState extends State<HomeView> {
                       CircleAvatar(
                         radius: 20,
                         backgroundColor: const Color(0xFF00D9FF),
-                        child: Text(
-                          userName[0].toUpperCase(),
-                          style: GoogleFonts.spaceGrotesk(
-                            color: const Color(0xFF0A0A0A),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: isGuest
+                            ? const Icon(
+                                Icons.person_outline,
+                                color: Color(0xFF0A0A0A),
+                                size: 24,
+                              )
+                            : Text(
+                                userName[0].toUpperCase(),
+                                style: GoogleFonts.spaceGrotesk(
+                                  color: const Color(0xFF0A0A0A),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
                   ],
                 ),
@@ -394,14 +401,16 @@ class _HomeViewState extends State<HomeView> {
                                 color: const Color(0xFF00D9FF),
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              userEmail,
-                              style: GoogleFonts.spaceGrotesk(
-                                fontSize: 14,
-                                color: const Color(0xFF00D9FF).withOpacity(0.6),
+                            if (userEmail.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                userEmail,
+                                style: GoogleFonts.spaceGrotesk(
+                                  fontSize: 14,
+                                  color: const Color(0xFF00D9FF).withOpacity(0.6),
+                                ),
                               ),
-                            ),
+                            ],
                           ],
                         ),
                       ),

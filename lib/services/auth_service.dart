@@ -73,4 +73,17 @@ class AuthService {
   
   /// Get user photo URL
   String? get userPhotoUrl => currentUser?.photoURL;
+  
+  /// Check if current user is a guest (anonymous)
+  bool get isGuest => currentUser?.isAnonymous ?? false;
+  
+  /// Sign in anonymously as guest
+  Future<UserCredential?> signInAsGuest() async {
+    try {
+      return await _auth.signInAnonymously();
+    } catch (e) {
+      print('Error signing in as guest: $e');
+      rethrow;
+    }
+  }
 }

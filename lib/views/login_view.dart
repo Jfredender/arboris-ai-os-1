@@ -35,6 +35,25 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  Future<void> _handleGuestSignIn() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await AuthService.instance.signInAsGuest();
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to enter as guest. Please try again.';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,6 +162,53 @@ class _LoginViewState extends State<LoginView> {
                                 const SizedBox(width: 12),
                                 Text(
                                   'CONECTAR COM GOOGLE',
+                                  style: GoogleFonts.spaceGrotesk(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  // Guest Sign In Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: OutlinedButton(
+                      onPressed: _isLoading ? null : _handleGuestSignIn,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF00D9FF),
+                        side: const BorderSide(
+                          color: Color(0xFF00D9FF),
+                          width: 2,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Color(0xFF00D9FF),
+                                ),
+                              ),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.person_outline, size: 24),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'ENTRAR COMO CONVIDADO',
                                   style: GoogleFonts.spaceGrotesk(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
