@@ -1,0 +1,1 @@
+ build/web/manifest.json:  /home/ubuntu/code_artifacts/arboris_genesis/web/index.html /home/ubuntu/code_artifacts/arboris_genesis/web/manifest.json

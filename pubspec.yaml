@@ -1,0 +1,42 @@
+name: arboris_genesis
+description: "ARBORIS AI OS 1 - F-47 AR HUD Foundation"
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Firebase Core - Updated to latest compatible versions
+  firebase_core: ^3.3.0
+  firebase_auth: ^5.1.4
+  cloud_firestore: ^5.2.1
+  
+  # Google Sign In
+  google_sign_in: ^6.2.1
+  
+  # Camera & Image Handling
+  camera: ^0.11.0+2
+  image_picker: ^1.0.7
+  
+  # Google Generative AI (Gemini)
+  google_generative_ai: ^0.2.2
+  
+  # UI & Fonts
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+  
+  # Utilities
+  path_provider: ^2.1.2
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,11 @@
+{
+    "name": "ARBORIS AI OS 1",
+    "short_name": "ARBORIS AI",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0A0A0A",
+    "theme_color": "#00D9FF",
+    "description": "ARBORIS AI OS 1 - F-47 AR HUD Foundation",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false
+}
