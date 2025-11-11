@@ -23,7 +23,7 @@ dependencies:
   image_picker: ^1.0.7
   
   # Google Generative AI (Gemini)
-  google_generative_ai: ^0.2.2
+  google_generative_ai: ^0.4.0
   
   # UI & Fonts
   google_fonts: ^6.2.1
