@@ -1,3 +1,4 @@
+
 # ARBORIS AI OS 1 - Genesis
 
 Sistema operacional de IA conversacional desenvolvido em Flutter com integração Firebase e Google Gemini AI.
