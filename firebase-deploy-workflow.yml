@@ -1,0 +1,63 @@
+
+name: Deploy Flutter Web to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+          cache: true
+
+      - name: 📦 Install Flutter dependencies
+        run: flutter pub get
+
+      - name: ✅ Verify Flutter installation
+        run: |
+          flutter --version
+          flutter doctor -v
+
+      - name: 🔨 Build Flutter Web (Release)
+        run: flutter build web --release --verbose
+
+      - name: 📋 List build output
+        run: |
+          echo "Build directory contents:"
+          ls -lah build/web/
+          echo "Total size:"
+          du -sh build/web/
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 🔥 Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: 🚀 Deploy to Firebase Hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase deploy --only hosting --token "$FIREBASE_TOKEN" --non-interactive
+
+      - name: ✅ Deployment Complete
+        run: |
+          echo "🎉 Deploy concluído com sucesso!"
+          echo "🌐 Acesse sua aplicação em: https://arboris-core.web.app"
