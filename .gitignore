@@ -1,4 +1,4 @@
-# Flutter/Dart
+﻿# Flutter/Dart
 .dart_tool/
 .packages
 .pub/
@@ -17,9 +17,6 @@ pubspec.lock
 # Android
 android/.gradle/
 **/local.properties
-
-# macOS
-*.DS_Store
 
 # logs, temp
 *.log
