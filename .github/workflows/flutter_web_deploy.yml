@@ -36,4 +36,3 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: firebase deploy --only hosting --project "$PROJECT_ID" --token "$FIREBASE_TOKEN"
-ci: fix workflow YAML syntax
