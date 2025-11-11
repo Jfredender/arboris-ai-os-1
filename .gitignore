@@ -1,0 +1,25 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+pubspec.lock
+
+# IDE/editor
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Android
+android/.gradle/
+**/local.properties
+
+# macOS
+*.DS_Store
+
+# logs, temp
+*.log
