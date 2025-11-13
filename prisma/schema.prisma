@@ -1,0 +1,219 @@
+
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/arboris_ai_web/nextjs_space/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                     String    @id @default(cuid())
+  name                   String?
+  email                  String?   @unique
+  emailVerified          DateTime?
+  image                  String?
+  password               String?
+  role                   String    @default("user")
+  bio                    String?
+  location               String?
+  exploratorPreferences  Json?
+  accounts               Account[]
+  sessions               Session[]
+  plantAnalyses          PlantAnalysis[]
+  healthAnalyses         HealthAnalysis[]
+  chatSessions           ChatSession[]
+  favorites              Favorite[]
+  notifications          Notification[]
+  codexArticles          CodexArticle[]
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PlantAnalysis {
+  id               String     @id @default(cuid())
+  userId           String
+  imageUrl         String
+  cloudStoragePath String
+  analysisResult   Json
+  confidence       Float?
+  plantName        String?
+  plantSpecies     String?
+  healthStatus     String?
+  recommendations  String[]   @default([])
+  isFavorite       Boolean    @default(false)
+  notes            String?    @db.Text
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  favorites Favorite[]
+}
+
+model ChatSession {
+  id        String      @id @default(cuid())
+  userId    String
+  title     String?
+  messages  ChatMessage[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id            String      @id @default(cuid())
+  sessionId     String
+  role          String      // 'user' or 'assistant'
+  content       String      @db.Text
+  timestamp     DateTime    @default(now())
+  
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model Favorite {
+  id          String   @id @default(cuid())
+  userId      String
+  analysisId  String
+  createdAt   DateTime @default(now())
+  
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysis PlantAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, analysisId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String   @db.Text
+  type      String   // 'info', 'success', 'warning', 'error'
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CodexCategory {
+  id          String         @id @default(cuid())
+  name        String         @unique
+  slug        String         @unique
+  description String?        @db.Text
+  icon        String?
+  color       String?
+  articles    CodexArticle[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model CodexArticle {
+  id          String        @id @default(cuid())
+  authorId    String
+  categoryId  String
+  title       String
+  slug        String        @unique
+  content     String        @db.Text
+  excerpt     String?       @db.Text
+  coverImage  String?
+  tags        String[]      @default([])
+  isPublished Boolean       @default(false)
+  views       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  author   User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category CodexCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model HealthAnalysis {
+  id                  String    @id @default(cuid())
+  userId              String
+  imageUrl            String?
+  cloudStoragePath    String?
+  symptoms            String[]  @default([])
+  diagnosis           Json
+  specialtyArea       String    // e.g., "Dermatologia", "Oftalmologia", etc.
+  confidence          Float?
+  severity            String?   // "low", "medium", "high", "critical"
+  prescription        Json?     // Medications, dosages, instructions
+  treatment           Json?     // Treatment plan and recommendations
+  recommendedProfessionals Json[]  @default([]) // List of recommended professionals
+  followUpNeeded      Boolean   @default(false)
+  followUpDate        DateTime?
+  notes               String?   @db.Text
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model HealthProfessional {
+  id              String   @id @default(cuid())
+  name            String
+  specialty       String   // e.g., "Dermatologista", "Oftalmologista"
+  crm             String?  // Medical registration number
+  qualifications  String[] @default([])
+  phone           String?
+  email           String?
+  address         String?
+  city            String?
+  state           String?
+  country         String   @default("Brasil")
+  zipCode         String?
+  rating          Float?   @default(0)
+  yearsExperience Int?
+  acceptsInsurance Boolean @default(false)
+  insuranceTypes  String[] @default([])
+  languages       String[] @default(["Português"])
+  availability    Json?    // Schedule information
+  consultationFee Float?
+  telehealth      Boolean  @default(false)
+  website         String?
+  bio             String?  @db.Text
+  verified        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([specialty])
+  @@index([city, state])
+}

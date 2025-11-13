@@ -1,0 +1,132 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Material Design 3 - Google Dark Theme */
+:root {
+  /* Surface Colors (Elevation System) */
+  --md-surface-base: #121212;
+  --md-surface-elevated1: #1E1E1E;
+  --md-surface-elevated2: #2C2C2C;
+  --md-surface-elevated3: #383838;
+  
+  /* Primary Colors */
+  --md-primary-main: #8AB4F8;
+  --md-primary-light: #A8C7FA;
+  --md-primary-dark: #669DF6;
+  --md-primary-container: #1E3A5F;
+  
+  /* Secondary Colors (Botanical Theme) */
+  --md-secondary-main: #81C995;
+  --md-secondary-light: #A3D9B1;
+  --md-secondary-dark: #5FB87A;
+  --md-secondary-container: #1E3B28;
+  
+  /* Text Colors */
+  --md-text-primary: #E8EAED;
+  --md-text-secondary: #9AA0A6;
+  --md-text-disabled: #5F6368;
+  
+  /* Utility Colors */
+  --md-divider: #3C4043;
+  --md-error: #F28B82;
+  --md-warning: #FDD663;
+  --md-success: #81C995;
+  --md-info: #8AB4F8;
+  
+  /* Glassmorphism */
+  --md-glass-light: rgba(255, 255, 255, 0.05);
+  --md-glass-medium: rgba(255, 255, 255, 0.08);
+  --md-glass-strong: rgba(255, 255, 255, 0.12);
+}
+
+@layer base {
+  * {
+    @apply border-[var(--md-divider)];
+  }
+  
+  body {
+    @apply bg-[var(--md-surface-base)] text-[var(--md-text-primary)];
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium;
+  }
+}
+
+@layer components {
+  /* Material Card */
+  .md-card {
+    @apply rounded-xl bg-[var(--md-surface-elevated1)] p-6;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.15);
+  }
+  
+  .md-card-elevated {
+    @apply rounded-xl bg-[var(--md-surface-elevated2)] p-6;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.3), 0 2px 2px rgba(0,0,0,0.15);
+  }
+  
+  /* FAB Button */
+  .md-fab {
+    @apply rounded-full flex items-center justify-center;
+    @apply transition-all duration-200 ease-out;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 4px 5px rgba(0,0,0,0.15);
+  }
+  
+  .md-fab:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 6px 6px rgba(0,0,0,0.15);
+  }
+  
+  /* Text Button */
+  .md-text-button {
+    @apply px-4 py-2 rounded-lg font-medium;
+    @apply transition-all duration-200;
+  }
+  
+  .md-text-button:hover {
+    background-color: var(--md-glass-light);
+  }
+  
+  /* Filled Button */
+  .md-filled-button {
+    @apply px-6 py-3 rounded-lg font-medium;
+    @apply bg-[var(--md-primary-main)] text-[var(--md-surface-base)];
+    @apply transition-all duration-200;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  
+  .md-filled-button:hover {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  /* Glassmorphism */
+  .glass-light {
+    background: var(--md-glass-light);
+    backdrop-filter: blur(10px);
+  }
+  
+  .glass-medium {
+    background: var(--md-glass-medium);
+    backdrop-filter: blur(12px);
+  }
+  
+  .glass-strong {
+    background: var(--md-glass-strong);
+    backdrop-filter: blur(16px);
+  }
+}
+
+/* Hide scrollbar but allow scrolling */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
